@@ -16,6 +16,11 @@ public class NullStorageCrateManager implements Listener {
 
     private JavaPlugin plugin;
     NamespacedKey key;
+    Inventory i;
+
+    // ItemMeta im = e.getPlayer().getInventory().getItemInMainHand().getItemMeta();
+    // im.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 987654321);
+    // e.getPlayer().getInventory().getItemInMainHand().setItemMeta(im);
 
     /**
      * Initialise the container
@@ -24,6 +29,10 @@ public class NullStorageCrateManager implements Listener {
     public NullStorageCrateManager(JavaPlugin plugin) {
         this.plugin = plugin;
         this.key = new NamespacedKey(plugin, "nullstorage");
+        i = Bukkit.createInventory(null, 9);
+        ItemStack diamonds = new ItemStack(Material.STONE);
+        diamonds.setAmount(20);
+        i.addItem(diamonds);
     }
 
     /**
@@ -53,12 +62,14 @@ public class NullStorageCrateManager implements Listener {
             return;
         }
 
-        // if the item is a null box
-        e.getBlock().setType(Material.OBSIDIAN);
-        // ItemMeta im = e.getPlayer().getInventory().getItemInMainHand().getItemMeta();
-        // im.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 987654321);
-        // e.getPlayer().getInventory().getItemInMainHand().setItemMeta(im);
+        // check that the player has enough items in his inventory
+        if (i.getContents()[0] == null) {
+            e.setCancelled(true);
+            return;
+        }
 
+        // decrement the items in the inventory
+        i.getContents()[0].setAmount(i.getContents()[0].getAmount() - 1);
 
         // make sure the item in hand isn't edited
         if (is_in_main_hand) {
@@ -74,19 +85,23 @@ public class NullStorageCrateManager implements Listener {
      */
     @EventHandler
     public void onNullStorageCrateRightClick(PlayerInteractEvent e) {
-        // ItemStack im;
+        // if player didn't click in the air, quit
+        if (e.getClickedBlock() != null) {
+            return;
+        }
+
+        // get wich and is prioritary
+        ItemStack im;
         if (isNullStorage(e.getPlayer().getInventory().getItemInMainHand())) {
-
+            im = e.getPlayer().getInventory().getItemInMainHand();
         } else if (isNullStorage(e.getPlayer().getInventory().getItemInOffHand())) {
-
+            im = e.getPlayer().getInventory().getItemInOffHand();
         } else {
             return;
         }
+
+        // manage the event
         e.setCancelled(true);
-        Inventory i = Bukkit.createInventory(null, 9);
-        ItemStack diamonds = new ItemStack(Material.DIAMOND);
-        diamonds.setAmount(2);
-        i.addItem(diamonds);
         e.getPlayer().openInventory(i);
     }
 
