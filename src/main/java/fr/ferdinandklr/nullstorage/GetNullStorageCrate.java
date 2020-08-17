@@ -32,9 +32,9 @@ public class GetNullStorageCrate implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // create the item
-        ItemStack stone = new ItemStack(Material.STONE);
-        stone.setAmount(1);
-        ItemMeta im = stone.getItemMeta();
+        ItemStack paper = new ItemStack(Material.PAPER);
+        paper.setAmount(1);
+        ItemMeta im = paper.getItemMeta();
         im.getPersistentDataContainer().set(new NamespacedKey(plugin, "id"), PersistentDataType.STRING, UUID.randomUUID().toString());
         im.addEnchant(Enchantment.LURE, 1, true);
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -54,9 +54,9 @@ public class GetNullStorageCrate implements CommandExecutor {
         im.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, serialized_inventory);
 
         // give item
-        stone.setItemMeta(im);
+        paper.setItemMeta(im);
         Player player = (Player) sender;
-        player.getInventory().addItem(stone);
+        player.getInventory().addItem(paper);
 
         return true;
 	}

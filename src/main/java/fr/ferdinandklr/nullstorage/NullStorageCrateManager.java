@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
+import javax.crypto.NullCipher;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -39,7 +41,7 @@ public class NullStorageCrateManager implements Listener {
      * @param itemstack The item stack to be determined
      */
     public boolean isNullStorage(ItemStack itemstack) {
-        return itemstack.getType() == Material.STONE && itemstack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "id"), PersistentDataType.STRING);
+        return itemstack != null && itemstack.getType() != Material.AIR && itemstack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "id"), PersistentDataType.STRING);
     }
 
     /**
@@ -63,23 +65,28 @@ public class NullStorageCrateManager implements Listener {
         }
 
         // check that the player has enough items in his inventory
-        int first_not_empty_slot = -1;
+        int first_slot_not_empty = -1;
         for (int index = 0; index < inventory.getSize(); index++) {
             if (inventory.getContents()[index] != null) {
-                first_not_empty_slot = index;
+                first_slot_not_empty = index;
                 break;
             }
         }
-        if (first_not_empty_slot == -1) { e.setCancelled(true); return; }
+        if (first_slot_not_empty == -1) { // if inv is empty
+            null_crate.setType(Material.PAPER); e.setCancelled(true); return;
+        }
+        if (first_slot_not_empty == -1 || inventory.getItem(first_slot_not_empty).getAmount() == 1) { // if inv nearly empty
+            null_crate.setType(Material.PAPER);
+        }
 
         // decrement the items in the inventory
-        inventory.getItem(first_not_empty_slot).setAmount(inventory.getItem(first_not_empty_slot).getAmount() - 1);
+        inventory.getItem(first_slot_not_empty).setAmount(inventory.getItem(first_slot_not_empty).getAmount() - 1);
 
         // serialize and save the inventory back
         try {
             serialized_inventory = InventorySerializer.serialize(inventory);
         } catch (IOException err) {
-            serialized_inventory = "error";
+            serialized_inventory = "error during serialization";
         }
         ItemMeta im = null_crate.getItemMeta();
         im.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, serialized_inventory);
@@ -144,6 +151,20 @@ public class NullStorageCrateManager implements Listener {
         Inventory inventory = opened_null_crates.get(e.getPlayer().getUniqueId());
         if (!inventory.equals(e.getInventory())) { return; }
         opened_null_crates.remove(e.getPlayer().getUniqueId());
+
+        // check if the inventory contains something or not
+        int first_slot_not_empty = -1;
+        for (int index = 0; index < inventory.getSize(); index++) {
+            if (inventory.getContents()[index] != null) {
+                first_slot_not_empty = index;
+                break;
+            }
+        }
+        if (first_slot_not_empty == -1) { // if inv is empty
+            null_crate.setType(Material.PAPER);
+        } else { // if inv is not empty
+            null_crate.setType(Material.STONE);
+        }
         
         // serialize the inventory
         String serialized_inventory;
@@ -167,11 +188,11 @@ public class NullStorageCrateManager implements Listener {
     public void onNullStorageInventoryClick(InventoryClickEvent e) {
 
         // check if the player is holding a null storage crate
-        ItemStack is = e.getWhoClicked().getInventory().getItemInMainHand();
-        if (!isNullStorage(is)) { return; }
+        ItemStack null_crate = e.getWhoClicked().getInventory().getItemInMainHand();
+        if (!isNullStorage(null_crate)) { return; }
 
         // deserialize the inventory
-        String serialized_inventory = is.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "content"), PersistentDataType.STRING);
+        String serialized_inventory = null_crate.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "content"), PersistentDataType.STRING);
         Inventory inventory;
         try {
             inventory = InventorySerializer.deserialize(serialized_inventory);

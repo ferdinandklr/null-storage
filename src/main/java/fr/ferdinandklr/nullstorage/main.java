@@ -4,7 +4,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * The class of the plugin
+ * The main class of the plugin
  */
 public class main extends JavaPlugin {
     
@@ -25,6 +25,7 @@ public class main extends JavaPlugin {
 
         /* THE PLUGIN IS ENABLED */
         System.out.println("the plugin is enabled !");
+
     }
 
     /**
@@ -32,8 +33,10 @@ public class main extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+
         /* THE PLUGIN IS DISABLED */
         System.out.println("the plugin is disabled !");
+
     }
     
 }
