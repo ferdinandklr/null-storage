@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class NullStorageCrateManager implements Listener {
+public class NullStorageManager implements Listener {
 
     JavaPlugin plugin;
     HashMap<UUID, Inventory> opened_null_crates = new HashMap<UUID, Inventory>();
@@ -29,7 +29,7 @@ public class NullStorageCrateManager implements Listener {
      * Initialise the container
      * @param plugin The current plugin
      */
-    public NullStorageCrateManager(JavaPlugin plugin) {
+    public NullStorageManager(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 

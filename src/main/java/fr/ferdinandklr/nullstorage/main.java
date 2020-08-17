@@ -15,7 +15,7 @@ public class main extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
 
         // register the block placing event listener
-        pm.registerEvents(new NullStorageCrateManager(this), this);
+        pm.registerEvents(new NullStorageManager(this), this);
 
         // set the command executor
         this.getCommand("nullstorage").setExecutor(new NullStorageCommand(this));
