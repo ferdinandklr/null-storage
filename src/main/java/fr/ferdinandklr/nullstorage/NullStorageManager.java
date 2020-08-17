@@ -35,7 +35,7 @@ public class NullStorageManager implements Listener {
      */
     public NullStorageManager(JavaPlugin plugin) {
         this.plugin = plugin;
-        authorized_blocks = Arrays.asList(Material.COBBLESTONE, Material.DIRT, Material.DIORITE, Material.ANDESITE, Material.GRANITE, Material.NETHERRACK, Material.END_STONE);
+        authorized_blocks = Arrays.asList(Material.COBBLESTONE, Material.DIRT, Material.DIORITE, Material.ANDESITE, Material.GRANITE, Material.NETHERRACK, Material.END_STONE, Material.SAND);
     }
 
     /**
