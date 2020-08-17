@@ -1,7 +1,9 @@
 package fr.ferdinandklr.nullstorage;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -24,6 +26,7 @@ public class NullStorageManager implements Listener {
 
     JavaPlugin plugin;
     HashMap<UUID, Inventory> opened_null_crates = new HashMap<UUID, Inventory>();
+    List<Material> authorized_blocks;
 
     /**
      * Initialise the container
@@ -31,6 +34,7 @@ public class NullStorageManager implements Listener {
      */
     public NullStorageManager(JavaPlugin plugin) {
         this.plugin = plugin;
+        authorized_blocks = Arrays.asList(Material.COBBLESTONE, Material.DIRT, Material.DIORITE, Material.ANDESITE, Material.GRANITE, Material.NETHERRACK, Material.END_STONE);
     }
 
     /**
@@ -70,11 +74,22 @@ public class NullStorageManager implements Listener {
                 break;
             }
         }
+        int second_slot_not_empty = -1;
+        for (int index = 0; index < inventory.getSize(); index++) {
+            if (inventory.getContents()[index] != null && index != first_slot_not_empty) {
+                second_slot_not_empty = index;
+                break;
+            }
+        }
         if (first_slot_not_empty == -1) { // if inv is empty
             null_crate.setType(Material.PAPER); e.setCancelled(true); return;
         }
-        if (first_slot_not_empty == -1 || inventory.getItem(first_slot_not_empty).getAmount() == 1) { // if inv nearly empty
-            null_crate.setType(Material.PAPER);
+        if (inventory.getItem(first_slot_not_empty).getAmount() == 1) { // if inv nearly empty
+            if (second_slot_not_empty == -1) {
+                null_crate.setType(Material.PAPER);
+            } else {
+                null_crate.setType(inventory.getItem(second_slot_not_empty).getType());
+            }
         }
 
         // decrement the items in the inventory
@@ -161,7 +176,7 @@ public class NullStorageManager implements Listener {
         if (first_slot_not_empty == -1) { // if inv is empty
             null_crate.setType(Material.PAPER);
         } else { // if inv is not empty
-            null_crate.setType(Material.STONE);
+            null_crate.setType(inventory.getItem(first_slot_not_empty).getType());
         }
         
         // serialize the inventory
@@ -197,7 +212,7 @@ public class NullStorageManager implements Listener {
         if (!inventory.equals(e.getInventory())) { return; }
 
         // check that click item is authorized
-        if ((e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.STONE) || isNullStorage(e.getCurrentItem())) {
+        if ((e.getCurrentItem() != null && !authorized_blocks.contains(e.getCurrentItem().getType())) || isNullStorage(e.getCurrentItem())) {
             e.setCancelled(true);
         }
 
