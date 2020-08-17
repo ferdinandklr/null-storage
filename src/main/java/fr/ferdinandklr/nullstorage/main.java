@@ -17,8 +17,11 @@ public class main extends JavaPlugin {
         // register the block placing event listener
         pm.registerEvents(new NullStorageManager(this), this);
 
-        // set the command executor
+        // add the nullstorage command
         this.getCommand("nullstorage").setExecutor(new NullStorageCommand(this));
+
+        // add the recipe to craft nullstorage items
+        pm.registerEvents(new NullStorageCraft(this), this);
 
         /* THE PLUGIN IS ENABLED */
         System.out.println("the plugin is enabled !");
