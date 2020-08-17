@@ -33,7 +33,7 @@ public class ExecutorLogger {
      *  @param msg The message you want to send to the executor
      */
     public static void err(CommandSender executor, String msg) {
-        executor.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "/!\\" + msg);
+        executor.sendMessage(ChatColor.RED + "" + ChatColor.ITALIC + "/!\\ " + msg);
     }
     
 }
