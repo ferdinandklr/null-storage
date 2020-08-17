@@ -1,0 +1,1 @@
+mvn install -f pom.xml && mv target/NullStorage-*.jar ../srv/plugins
