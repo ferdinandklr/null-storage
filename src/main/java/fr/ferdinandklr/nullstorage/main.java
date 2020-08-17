@@ -3,9 +3,6 @@ package fr.ferdinandklr.nullstorage;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * The main class of the plugin
- */
 public class main extends JavaPlugin {
     
     /**

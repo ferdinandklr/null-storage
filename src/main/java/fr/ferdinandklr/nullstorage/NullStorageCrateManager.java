@@ -144,9 +144,9 @@ public class NullStorageCrateManager implements Listener {
         
         // check if the player has a null crate opened
         if (!opened_null_crates.containsKey(e.getPlayer().getUniqueId())) { return; }
-
-        // get the inventory and check if it's the same as the opened one
         Inventory inventory = opened_null_crates.get(e.getPlayer().getUniqueId());
+
+        // check if the open inventory is the null crate's one
         if (!inventory.equals(e.getInventory())) { return; }
         opened_null_crates.remove(e.getPlayer().getUniqueId());
 
@@ -180,7 +180,7 @@ public class NullStorageCrateManager implements Listener {
     }
 
     /*
-     *  This event runs whenever a player tries to add items to is null storage crate
+     *  This event runs whenever a player tries to add items to his null storage crate
      */
     @EventHandler
     public void onNullStorageInventoryClick(InventoryClickEvent e) {
@@ -189,20 +189,16 @@ public class NullStorageCrateManager implements Listener {
         ItemStack null_crate = e.getWhoClicked().getInventory().getItemInMainHand();
         if (!isNullStorage(null_crate)) { return; }
 
-        // deserialize the inventory
-        String serialized_inventory = null_crate.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, "content"), PersistentDataType.STRING);
-        Inventory inventory;
-        try {
-            inventory = InventorySerializer.deserialize(serialized_inventory);
-        } catch (Exception err) {
-            inventory = Bukkit.createInventory(null, 18);
-        }
+        // check if the player has a null crate opened
+        if (!opened_null_crates.containsKey(e.getWhoClicked().getUniqueId())) { return; }
+        Inventory inventory = opened_null_crates.get(e.getWhoClicked().getUniqueId());
 
-        // check that the opened inventory is the one from the null crate
-        if (e.getInventory().equals(inventory)) {
-            if (e.getCurrentItem() != null && (e.getCurrentItem().getType() != Material.STONE || isNullStorage(e.getCurrentItem()))) {
-                e.setCancelled(true);
-            }
+        // check if the open inventory is the null crate's one
+        if (!inventory.equals(e.getInventory())) { return; }
+
+        // check that click item is authorized
+        if ((e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.STONE) || isNullStorage(e.getCurrentItem())) {
+            e.setCancelled(true);
         }
 
     }
