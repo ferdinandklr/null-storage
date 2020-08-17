@@ -20,11 +20,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class GetNullStorageCrate implements CommandExecutor {
+public class NullStorageCommand implements CommandExecutor {
 
     JavaPlugin plugin;
 
-    public GetNullStorageCrate(JavaPlugin plugin) {
+    public NullStorageCommand(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 

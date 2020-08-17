@@ -18,7 +18,7 @@ public class main extends JavaPlugin {
         pm.registerEvents(new NullStorageCrateManager(this), this);
 
         // set the command executor
-        this.getCommand("nullstorage").setExecutor(new GetNullStorageCrate(this));
+        this.getCommand("nullstorage").setExecutor(new NullStorageCommand(this));
 
         /* THE PLUGIN IS ENABLED */
         System.out.println("the plugin is enabled !");
