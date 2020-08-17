@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -116,15 +117,15 @@ public class NullStorageManager implements Listener {
     @EventHandler
     public void onNullStorageCrateOpen(PlayerInteractEvent e) {
 
-        // if player didn't click in the air, quit
-        if (e.getClickedBlock() != null) { return; }
+        // if player din't right click air, quit
+        if (e.getAction() != Action.RIGHT_CLICK_AIR) { return; }
 
         // if player is sneaking, quit
         if (e.getPlayer().isSneaking()) { return; }
 
         // check if player is holding a null storage crate
-        EquipmentSlot hand_wich_clicked = e.getHand();
-        if (!isNullStorage(e.getPlayer().getInventory().getItem(hand_wich_clicked))) { return; }
+        EquipmentSlot hand_which_clicked = e.getHand();
+        if (!isNullStorage(e.getPlayer().getInventory().getItem(hand_which_clicked))) { return; }
 
         // cancel the default event
         e.setCancelled(true);
@@ -155,7 +156,10 @@ public class NullStorageManager implements Listener {
 
         // check if the player is holding a null storage crate
         ItemStack null_crate = e.getPlayer().getInventory().getItemInMainHand();
-        if (!isNullStorage(null_crate)) { return; }
+        if (!isNullStorage(null_crate)) {
+            null_crate = e.getPlayer().getInventory().getItemInOffHand();
+            if (!isNullStorage(null_crate)) { return; }
+        }
         
         // check if the player has a null crate opened
         if (!opened_null_crates.containsKey(e.getPlayer().getUniqueId())) { return; }
@@ -202,7 +206,10 @@ public class NullStorageManager implements Listener {
 
         // check if the player is holding a null storage crate
         ItemStack null_crate = e.getWhoClicked().getInventory().getItemInMainHand();
-        if (!isNullStorage(null_crate)) { return; }
+        if (!isNullStorage(null_crate)) {
+            null_crate = e.getWhoClicked().getInventory().getItemInOffHand();
+            if (!isNullStorage(null_crate)) { return; }
+        }
 
         // check if the player has a null crate opened
         if (!opened_null_crates.containsKey(e.getWhoClicked().getUniqueId())) { return; }
