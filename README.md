@@ -7,7 +7,7 @@ The only minecraft version I tested is currently **1.16**, but it should work pr
 
 I want to give special thanks to [TheTurkeyDev](https://github.com/TheTurkeyDev/) for this idea of plugin, you can try his version [here](https://github.com/TheTurkeyDev/vanilla-null).
 
-## TL;DR
+## I just want to try it
 
 If you just want to try/install the plugin, you can download it by clicking on the releases button on the right (if github didn't changed).
 Then simply drop it in your /plugins folder, and your are good to go.
@@ -20,4 +20,4 @@ Then download the github zip, and compile it on your computer. I assume that if 
 
 Well, I didn't simply fork his project because after readind the code, I wanted to do it quite differently, so there would be way too many code revamp for a fork to make sense. First, I didn't locked myself to shulkers, and I prefered to store all the data in metadata tags. This way I don't need databases and heavy calculations to check if the item is destroy at some point or not etc. Secondly, I make sure that null crates can only contain certain items *(dirt, cobblestone, ...)*, and not any item, to nerf a little bit this cheaty item. In fact, if you could put shulkers in it, you could pretty much create infinite storage in a single block, and I didn't want that.
 
-This code doesn't posses any config file as I don't want to loose time doing this. If you want to customize the plugin, you can either contact me by email or edit it by yourself (this code is completly open to use to anyone, for free).
+This plugin doesn't posses any config file as I don't want to loose time doing this. If you want to customize the plugin, you can either contact me or edit it by yourself (this code is completly open to use to anyone).
