@@ -31,6 +31,19 @@ public class NullStorageCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        // check the sender is a player
+        if (!(sender instanceof Player)) {
+            ExecutorLogger.err(sender, "you must be a player to execute this commmand");
+            return true;
+        }
+        Player player = (Player) sender;
+
+        // check the player has permission
+        if (!player.hasPermission("nullstorage.command.nullstorage")) {
+            ExecutorLogger.err(sender, "you don't have the permission to execute this command");
+            return true;
+        }
+
         // create the item
         ItemStack paper = new ItemStack(Material.PAPER);
         paper.setAmount(1);
@@ -40,7 +53,7 @@ public class NullStorageCommand implements CommandExecutor {
         im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         im.setDisplayName("Null crate");
         List<String> lore = new ArrayList<String>();
-        lore.add("right click in void to see content");
+        lore.add("right click in the air to see null crate's content");
         im.setLore(lore);
 
         // create inventory
@@ -52,10 +65,9 @@ public class NullStorageCommand implements CommandExecutor {
             serialized_inventory = "error during serialization";
         }
         im.getPersistentDataContainer().set(new NamespacedKey(plugin, "content"), PersistentDataType.STRING, serialized_inventory);
-
-        // give item
         paper.setItemMeta(im);
-        Player player = (Player) sender;
+
+        // give item to the player
         player.getInventory().addItem(paper);
 
         return true;

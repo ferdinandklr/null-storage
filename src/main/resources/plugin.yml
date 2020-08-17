@@ -2,17 +2,17 @@ main: fr.ferdinandklr.nullstorage.main
 name: nullstorage
 version: 0.1.2
 api-version: 1.16
-
 author: Ferdinand Keller
+description: This plugin adds null crates to your server
+database: false
 
 permissions:
   nullstorage.command.nullstorage:
     description: allows players to create null storage crates with a command
-    default: false
+    default: op
 
 commands:
   nullstorage:
     description: gives to the player a null storage box
     usage: /<command>
     permission: nullstorage.command.nullstorage
-    default: op
